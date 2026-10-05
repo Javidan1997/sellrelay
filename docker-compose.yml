@@ -1,0 +1,64 @@
+# Local development dependencies. Application processes run on the host (pnpm dev:*)
+# or via the `app` profile (docker compose --profile app up).
+name: sellrelay
+
+services:
+  postgres:
+    image: postgres:18
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_SUPERUSER_PASSWORD:-postgres-local-only}
+      POSTGRES_DB: postgres
+    ports:
+      - '${POSTGRES_PORT:-5432}:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  redis:
+    image: redis:8
+    command: ['redis-server', '--appendonly', 'yes']
+    ports:
+      - '${REDIS_PORT:-6379}:6379'
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  api:
+    profiles: ['app']
+    build: { context: ., dockerfile: Dockerfile, target: runtime }
+    command: ['node', 'services/api/src/main.ts']
+    env_file: .env
+    environment:
+      DATABASE_URL_API: postgres://sellrelay_api:${DB_API_PASSWORD}@postgres:5432/sellrelay
+      DATABASE_URL_WORKER: postgres://sellrelay_worker:${DB_WORKER_PASSWORD}@postgres:5432/sellrelay
+      REDIS_URL: redis://redis:6379
+    ports: ['8080:8080']
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+
+  worker:
+    profiles: ['app']
+    build: { context: ., dockerfile: Dockerfile, target: runtime }
+    command: ['node', 'services/worker/src/main.ts']
+    env_file: .env
+    environment:
+      DATABASE_URL_WORKER: postgres://sellrelay_worker:${DB_WORKER_PASSWORD}@postgres:5432/sellrelay
+      REDIS_URL: redis://redis:6379
+    stop_grace_period: 45s
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+
+volumes:
+  pgdata:
+  redisdata:

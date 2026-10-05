@@ -1,0 +1,16 @@
+REVOKE ALL ON ALL TABLES IN SCHEMA sellrelay FROM sellrelay_api, sellrelay_worker, sellrelay_ops, sellrelay_definer;
+DROP FUNCTION IF EXISTS ops_replay_dead_job(uuid, uuid, text, text);
+DROP FUNCTION IF EXISTS replay_job(uuid, uuid, text, text);
+DROP FUNCTION IF EXISTS purge_retention(integer, integer, integer, integer);
+DROP FUNCTION IF EXISTS active_installations(uuid, integer);
+DROP FUNCTION IF EXISTS credentials_needing_refresh(interval, integer);
+DROP FUNCTION IF EXISTS outbox_stats();
+DROP FUNCTION IF EXISTS queue_stats();
+DROP FUNCTION IF EXISTS claim_outbox(text, integer, integer);
+DROP FUNCTION IF EXISTS reclaim_expired_leases(integer);
+DROP FUNCTION IF EXISTS claim_jobs(text, integer, integer, integer, integer, integer, text[]);
+DROP FUNCTION IF EXISTS resolve_membership(text, text, uuid);
+DROP FUNCTION IF EXISTS provision_shopify_installation(text, text, text, text);
+DROP FUNCTION IF EXISTS resolve_shopify_installation(text);
+REVOKE CREATE ON SCHEMA sellrelay FROM sellrelay_definer;
+ALTER DEFAULT PRIVILEGES FOR ROLE sellrelay_migrator IN SCHEMA sellrelay GRANT EXECUTE ON FUNCTIONS TO PUBLIC;

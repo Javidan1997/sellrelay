@@ -59,7 +59,7 @@ module.exports = {
   ],
   options: {
     doNotFollow: { path: 'node_modules' },
-    exclude: { path: '(node_modules|/build/|/dist/|\\.react-router)' },
+    exclude: { path: '(/build/|/dist/|\\.react-router)' },
     tsPreCompilationDeps: true,
     tsConfig: { fileName: 'tsconfig.json' },
     enhancedResolveOptions: {
