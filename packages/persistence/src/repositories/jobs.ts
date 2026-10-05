@@ -328,3 +328,14 @@ export async function queueStats(
     };
   });
 }
+
+/** Graceful shutdown: hand the job back without consuming an attempt. */
+export function releaseJob(tx: Tx, jobId: string, workerId: string): Promise<void> {
+  return finish(
+    tx,
+    jobId,
+    workerId,
+    `status = 'queued', run_at = now(), attempts = GREATEST(attempts - 1, 0)`,
+    [],
+  );
+}

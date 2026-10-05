@@ -15,6 +15,7 @@ export * from './ports/common.ts';
 export * from './ports/store-platform-adapter.ts';
 export * from './ports/marketplace-connector.ts';
 export * from './ports/crm-connector.ts';
+export * from './ports/rate-budget.ts';
 export * from './entitlements.ts';
 export * from './rules/backoff.ts';
 export * from './rules/versioning.ts';

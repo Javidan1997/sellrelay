@@ -58,3 +58,16 @@ export interface Page<T> {
   readonly items: readonly T[];
   readonly nextCursor?: string;
 }
+
+/** Thrown by adapters/handlers to signal a classified provider failure. */
+export class ProviderFailure extends Error {
+  readonly error: ProviderError;
+  constructor(error: ProviderError) {
+    super(`${error.code}: ${error.message}`);
+    this.name = 'ProviderFailure';
+    this.error = error;
+  }
+  get retryable(): boolean {
+    return RETRYABLE_ERROR_CODES.has(this.error.code);
+  }
+}

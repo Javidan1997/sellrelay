@@ -11,4 +11,5 @@ export * as ledger from './repositories/ledger.ts';
 export * as repo from './repositories/misc.ts';
 export * as heartbeats from './repositories/heartbeats.ts';
 export type { JobRow, EnqueueJob } from './repositories/jobs.ts';
+export type { OutboxRow } from './repositories/outbox.ts';
 export { LeaseLostError } from './repositories/jobs.ts';
