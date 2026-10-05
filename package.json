@@ -1,0 +1,42 @@
+{
+  "name": "sellrelay",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@12.9.1",
+  "engines": {
+    "node": ">=24.21.0 <25"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --noEmit && pnpm -r --filter ./apps/* typecheck",
+    "lint": "eslint . --max-warnings=0",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run --project unit",
+    "test:integration": "vitest run --project integration",
+    "test:all": "vitest run",
+    "test:e2e": "playwright test -c tests/e2e/playwright.config.ts",
+    "deps:check": "depcruise --config .dependency-cruiser.cjs packages services apps/shopify/app",
+    "db:bootstrap": "node packages/persistence/src/cli/bootstrap.ts",
+    "db:migrate": "node packages/persistence/src/cli/migrate.ts up",
+    "db:rollback": "node packages/persistence/src/cli/migrate.ts down",
+    "db:seed": "node packages/persistence/src/cli/seed.ts",
+    "dev:api": "node --watch services/api/src/main.ts",
+    "dev:worker": "node --watch services/worker/src/main.ts",
+    "smoke": "node scripts/smoke.ts",
+    "bench:catalog": "node scripts/bench/catalog-import.ts",
+    "bench:stock": "node scripts/bench/stock-burst.ts",
+    "check": "pnpm typecheck && pnpm lint && pnpm format:check && pnpm deps:check && pnpm test"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@playwright/test": "1.63.0",
+    "@types/node": "24.19.1",
+    "dependency-cruiser": "18.5.0",
+    "eslint": "10.12.0",
+    "globals": "17.13.0",
+    "prettier": "3.9.9",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.71.1",
+    "vitest": "5.0.3"
+  }
+}

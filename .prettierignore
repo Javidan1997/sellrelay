@@ -1,0 +1,8 @@
+pnpm-lock.yaml
+**/build
+**/.react-router
+**/node_modules
+coverage
+infra/terraform/**/.terraform
+test-results
+playwright-report

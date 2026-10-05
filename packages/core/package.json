@@ -1,0 +1,10 @@
+{
+  "name": "@sellrelay/core",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Platform-neutral canonical models, ports, domain events and pure engine rules. No SDK/IO dependencies.",
+  "exports": {
+    ".": "./src/index.ts"
+  }
+}
