@@ -177,3 +177,26 @@ export function normalizeShopifyWebhook(w: VerifiedWebhook): NormalizedStoreEven
       return [{ type: 'ignored', reason: `unhandled topic ${w.topic}` }];
   }
 }
+
+/**
+ * Data minimization for compliance webhooks: keep only identifiers needed to process the request
+ * (shop, customer id, order ids, request id); drop email, phone and any other personal fields
+ * before anything is persisted.
+ */
+export function minimizeCompliancePayload(topic: string, payload: unknown): unknown {
+  if (!COMPLIANCE_TOPICS.has(topic)) return payload;
+  const p = obj(payload);
+  const customer = obj(p['customer']);
+  const ids = (v: unknown) =>
+    Array.isArray(v) ? v.filter((x) => typeof x === 'number' || typeof x === 'string') : undefined;
+  return {
+    shop_id: p['shop_id'] ?? null,
+    shop_domain: p['shop_domain'] ?? null,
+    ...(customer['id'] !== undefined ? { customer: { id: customer['id'] } } : {}),
+    ...(ids(p['orders_requested']) ? { orders_requested: ids(p['orders_requested']) } : {}),
+    ...(ids(p['orders_to_redact']) ? { orders_to_redact: ids(p['orders_to_redact']) } : {}),
+    ...(obj(p['data_request'])['id'] !== undefined
+      ? { data_request: { id: obj(p['data_request'])['id'] } }
+      : {}),
+  };
+}

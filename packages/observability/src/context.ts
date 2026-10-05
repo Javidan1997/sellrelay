@@ -43,3 +43,8 @@ export function assertNoOpenTransaction(operation: string): void {
   const tx = txStore.getStore();
   if (tx) throw new TransactionHeldDuringExternalCallError(operation, tx.label);
 }
+
+/** Bind a context to the remainder of the current async flow (used from framework hooks). */
+export function enterContext(ctx: ExecutionContext): void {
+  contextStore.enterWith(ctx);
+}

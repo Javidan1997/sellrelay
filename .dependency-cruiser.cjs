@@ -35,6 +35,15 @@ module.exports = {
       to: { path: '^(packages/(platforms|connectors|billing)|services|apps)/' },
     },
     {
+      name: 'application-layer-on-top',
+      severity: 'error',
+      comment: 'Only services may use the application orchestration layer.',
+      from: {
+        path: '^packages/(core|persistence|platforms|connectors|billing|security|ratelimit|observability)/',
+      },
+      to: { path: '^packages/application/' },
+    },
+    {
       name: 'packages-not-depend-on-services-or-apps',
       severity: 'error',
       from: { path: '^packages/' },

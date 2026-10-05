@@ -1,0 +1,20 @@
+{
+  "name": "@sellrelay/application",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Application orchestration shared by services/api and services/worker. Host-neutral use cases + host-specific glue.",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@sellrelay/billing": "workspace:*",
+    "@sellrelay/core": "workspace:*",
+    "@sellrelay/observability": "workspace:*",
+    "@sellrelay/persistence": "workspace:*",
+    "@sellrelay/platform-shopify": "workspace:*",
+    "@sellrelay/ratelimit": "workspace:*",
+    "@sellrelay/security": "workspace:*",
+    "ioredis": "6.0.0"
+  }
+}

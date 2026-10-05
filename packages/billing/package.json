@@ -1,0 +1,13 @@
+{
+  "name": "@sellrelay/billing",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@sellrelay/core": "workspace:*",
+    "@sellrelay/platform-shopify": "workspace:*"
+  }
+}
