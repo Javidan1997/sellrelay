@@ -216,7 +216,10 @@ export function findIntegration(key: string): IntegrationDescriptor | undefined 
 }
 
 /** UI and API must treat an operation as usable only if this returns true. */
-export function isOperationAvailable(descriptor: IntegrationDescriptor, op: OperationKey): boolean {
+export function isOperationAvailable<Op extends OperationKey>(
+  descriptor: IntegrationDescriptor<Op>,
+  op: Op,
+): boolean {
   if (descriptor.implementation !== 'implemented') return false;
   const support = (descriptor.operations as Readonly<Record<string, OperationSupport>>)[op];
   return support?.status === 'available';
